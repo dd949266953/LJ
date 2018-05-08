@@ -14,7 +14,7 @@ public interface BuildingMapper {
 
     int insertSelective(Building record);
 
-    Building selectByPrimaryKey(Integer buildingid0);
+    Building selectByPrimaryKey(Integer buildingid01);
 
     int updateByPrimaryKeySelective(Building record);
 
