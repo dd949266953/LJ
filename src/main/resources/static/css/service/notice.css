@@ -1,0 +1,23 @@
+* {
+	padding: 0px;
+	margin: 0px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+ul {
+	list-style-type: none;
+}
+
+a {
+	text-decoration: none;
+}
+
+body {
+	font-weight: 400;
+	font-family: "microsoft yahei", 'Open Sans', sans-serif;
+	font-size: 15px;
+	line-height: 1.42857143;
+	color: #5e5e5e;
+}

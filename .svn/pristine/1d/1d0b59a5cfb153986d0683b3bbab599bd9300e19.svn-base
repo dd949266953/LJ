@@ -1,0 +1,9 @@
+package com.fcz.service.dataCenterService;
+
+import java.util.List;
+
+import com.fcz.entity.Registeredtype;
+
+public interface RegisteredtypeService {
+	List<Registeredtype> getAllBuilding(String buildingName);
+}

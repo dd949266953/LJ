@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fcz.dao.CarportMapper">
+  <resultMap id="BaseResultMap" type="com.fcz.entity.Carport">
+    <id column="carportid" jdbcType="INTEGER" property="carportid" />
+    <result column="area" jdbcType="DOUBLE" property="area" />
+    <result column="carportno" jdbcType="INTEGER" property="carportno" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="community_id" jdbcType="INTEGER" property="communityId" />
+    <result column="car_port_state_id" jdbcType="INTEGER" property="carPortStateId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    carportid, area, carportno, remark, community_id, car_port_state_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from carport
+    where carportid = #{carportid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from carport
+    where carportid = #{carportid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.fcz.entity.Carport">
+    insert into carport (carportid, area, carportno, 
+      remark, community_id, car_port_state_id
+      )
+    values (#{carportid,jdbcType=INTEGER}, #{area,jdbcType=DOUBLE}, #{carportno,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR}, #{communityId,jdbcType=INTEGER}, #{carPortStateId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.fcz.entity.Carport">
+    insert into carport
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="carportid != null">
+        carportid,
+      </if>
+      <if test="area != null">
+        area,
+      </if>
+      <if test="carportno != null">
+        carportno,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="communityId != null">
+        community_id,
+      </if>
+      <if test="carPortStateId != null">
+        car_port_state_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="carportid != null">
+        #{carportid,jdbcType=INTEGER},
+      </if>
+      <if test="area != null">
+        #{area,jdbcType=DOUBLE},
+      </if>
+      <if test="carportno != null">
+        #{carportno,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="communityId != null">
+        #{communityId,jdbcType=INTEGER},
+      </if>
+      <if test="carPortStateId != null">
+        #{carPortStateId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fcz.entity.Carport">
+    update carport
+    <set>
+      <if test="area != null">
+        area = #{area,jdbcType=DOUBLE},
+      </if>
+      <if test="carportno != null">
+        carportno = #{carportno,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="communityId != null">
+        community_id = #{communityId,jdbcType=INTEGER},
+      </if>
+      <if test="carPortStateId != null">
+        car_port_state_id = #{carPortStateId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where carportid = #{carportid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fcz.entity.Carport">
+    update carport
+    set area = #{area,jdbcType=DOUBLE},
+      carportno = #{carportno,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      community_id = #{communityId,jdbcType=INTEGER},
+      car_port_state_id = #{carPortStateId,jdbcType=INTEGER}
+    where carportid = #{carportid,jdbcType=INTEGER}
+  </update>
+</mapper>

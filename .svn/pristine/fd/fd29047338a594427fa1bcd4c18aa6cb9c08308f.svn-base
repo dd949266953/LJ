@@ -1,0 +1,74 @@
+package com.fcz.controller.dataCenter;
+
+
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.fcz.service.dataCenterService.TenementService;
+import com.fcz.utils.BindTableUtil;
+
+
+/**
+ * 控制住户器类
+ * @author ADD
+ *
+ */
+@RequestMapping("tenement")
+@Controller
+public class TenementController {
+	private  final static Logger LOGGER = LoggerFactory.getLogger(CommunityController.class);
+	
+	@Autowired
+	private TenementService tenementservice;
+	
+	
+	@RequestMapping("tenementList.html")
+	public String getTenementList() {
+			return "dataCenter/list/tenmentList";
+	}
+	
+	/**
+	 * 获取所有住户信息
+	 * @return
+	 */
+	@RequestMapping(value="getAllTenement.json")
+	@ResponseBody
+	public Object getAllTenement(@RequestParam(value="tenementKey")String tenementKey) {
+		return BindTableUtil.bindTableUtil(0, 
+										  1, 
+										  tenementservice.getTenementBySelect(tenementKey,tenementKey,tenementKey,tenementKey));
+	}
+	/**
+	 * 跳转添加住户页面
+	 * @return
+	 */
+	@RequestMapping(value= {"addTenement/{tenementid}","updateTenement/{tenementid}"})
+	public String getAddTenement(@PathVariable("tenementid") Integer tenementid) {
+		return "dataCenter/add/addTenement";
+
+	}
+	/**
+	 * 跳转添加住户下一个页面
+	 * @return
+	 */
+	@RequestMapping("addDetailTenement.html")
+	public String getAddDetailTenement() {
+			return "dataCenter/add/addDetailTenement";
+	}
+//	/**
+//	 * 删除用户
+//	 */
+//	@RequestMapping(value="delTenement")
+//	@ResponseBody
+//	public Object delTenementById(HttpServletRequest request) {
+//		tenementRepository.deleteById(Integer.parseInt(request.getParameter("tenementid")));
+//		return ResultUtil.success();
+//	}
+}

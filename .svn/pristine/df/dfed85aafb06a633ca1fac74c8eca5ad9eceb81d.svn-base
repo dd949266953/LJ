@@ -1,0 +1,52 @@
+package com.fcz.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import com.fcz.entity.Tenement;
+@Mapper
+public interface TenementMapper {
+    int deleteByPrimaryKey(Integer tenementid);
+
+    int insert(Tenement record);
+    /**
+     * 添加用户
+     * @param tenement
+     * @return
+     */
+    int insertTenement(Tenement tenement);
+
+    Tenement selectByPrimaryKey(Integer tenementid);
+
+    int updateByPrimaryKeySelective(Tenement record);
+
+    int updateByPrimaryKey(Tenement record);
+    
+    /**
+     * 根据 用户名  房号 电话 业主卡号 查询住户
+     * @param username
+     * @param houseno
+     * @param phone
+     * @param usercardno
+     * @return
+     */
+    List<Tenement> getTenementBySelect(@Param("username") String username,
+    								   @Param("houseno") String houseno,
+    								   @Param("phone") String phone,
+    								   @Param("usercardno") String usercardno);
+    /**
+     * 根据 用户名  房号 电话 业主卡号 查询住户总数
+     * @param username
+     * @param houseno
+     * @param phone
+     * @param usercardno
+     * @return
+     */
+    long getTenementCountBySelect(@Param("username") String username,
+    					          @Param("houseno") String houseno,
+			   					  @Param("phone") String phone,
+			   					  @Param("usercardno") String usercardno);
+    
+}

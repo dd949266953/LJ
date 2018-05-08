@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fcz.dao.TenementMapper">
+  <resultMap id="BaseResultMap" type="com.fcz.entity.Tenement">
+    <id column="tenementid" jdbcType="INTEGER" property="tenementid" />
+    <result column="comecause" jdbcType="VARCHAR" property="comecause" />
+    <result column="cometime" jdbcType="TIMESTAMP" property="cometime" />
+    <result column="identityphoto" jdbcType="VARCHAR" property="identityphoto" />
+    <result column="idnumber" jdbcType="VARCHAR" property="idnumber" />
+    <result column="maritalstatus" jdbcType="VARCHAR" property="maritalstatus" />
+    <result column="nation" jdbcType="VARCHAR" property="nation" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="politicsstatus" jdbcType="VARCHAR" property="politicsstatus" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="usercardno" jdbcType="VARCHAR" property="usercardno" />
+    <result column="useremail" jdbcType="VARCHAR" property="useremail" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="userphoto" jdbcType="VARCHAR" property="userphoto" />
+    <result column="userqq" jdbcType="INTEGER" property="userqq" />
+    <result column="userwx" jdbcType="VARCHAR" property="userwx" />
+    <result column="buildingid" jdbcType="INTEGER" property="buildingid" />
+    <result column="communityid" jdbcType="INTEGER" property="communityid" />
+    <result column="houseid" jdbcType="INTEGER" property="houseid" />
+    <result column="audit_id" jdbcType="INTEGER" property="auditId" />
+    <result column="tenement_state_id" jdbcType="INTEGER" property="tenementStateId" />
+    <result column="emergency_id" jdbcType="INTEGER" property="emergencyId" />
+    <result column="registeredId" jdbcType="INTEGER" property="registeredid" />
+    <association property="community" javaType="com.fcz.entity.Community">
+			<result property="communityId" column="community_id" />
+			<result property="communityName" column="community_name" />
+	</association>
+	<association property="building" javaType="com.fcz.entity.Building">
+    		<result property="buildingid" column="buildingid" />
+			<result property="buildingname" column="buildingname" />
+    </association>
+    <association property="house" javaType="com.fcz.entity.House">
+			<result property="houseid" column="houseid" />
+			<result property="houseno" column="houseno" />
+			<result property="houseunit" column="houseunit" />
+	</association>
+	<association property="emergencyContact" javaType="com.fcz.entity.EmergencyContact">
+    		<result property="emergencyId" column="emergency_id" />
+			<result property="emergencyName" column="emergency_name" />
+    </association>
+    <association property="tenementState" javaType="com.fcz.entity.TenementState">
+    		<result property="tenementStateId" column="tenement_state_id" />
+			<result property="tenementName" column="tenement_name" />
+    </association>
+   
+  </resultMap>
+  
+  <!-- 查询所有 -->
+  <select id="getTenementBySelect" resultMap="BaseResultMap" parameterType="java.lang.String">
+      SELECT t.`phone`,t.`username`,c.`community_name`,b.`buildingname`,h.`houseunit`,h.`houseno`,e.`emergency_name`,ts.`tenement_name`,t.`usercardno` FROM tenement t 
+		INNER JOIN community c ON t.`communityid`=c.`community_id`
+		INNER JOIN building b ON t.`buildingid`=b.`buildingid`	
+		INNER JOIN house h ON t.`houseid`=h.`houseid`
+		INNER JOIN emergency_contact e ON t.`emergency_id`=e.`emergency_id`
+		INNER JOIN tenement_state ts ON t.`tenement_state_id`=ts.`tenement_state_id`
+		WHERE 1=1 
+		<if test="username!=''">
+       		AND t.`username` LIKE CONCAT ('%',#{username},'%')
+      	</if>
+      	<if test="houseno!=''">
+       		AND h.`houseno` LIKE CONCAT ('%',#{houseno},'%')
+      	</if>
+      	<if test="phone!=''">
+       		AND t.`phone` LIKE CONCAT ('%',#{phone},'%')
+      	</if>
+      	<if test="usercardno!=''">
+       		AND t.`usercardno` LIKE CONCAT ('%',#{usercardno},'%')
+      	</if>
+  </select>
+  <!-- 查询数量-->
+  <select id="getTenementCountBySelect" resultType="java.lang.Long" parameterType="java.lang.String">
+    SELECT count(1) FROM tenement t 
+		INNER JOIN community c ON t.`communityid`=c.`community_id`
+		INNER JOIN building b ON t.`buildingid`=b.`buildingid`	
+		INNER JOIN house h ON t.`houseid`=h.`houseid`
+		INNER JOIN emergency_contact e ON t.`emergency_id`=e.`emergency_id`
+		INNER JOIN tenement_state ts ON t.`tenement_state_id`=ts.`tenement_state_id`
+		WHERE 1=1 
+		<if test="username!=''">
+       		AND t.`username` LIKE CONCAT ('%',#{username},'%')
+      	</if>
+      	<if test="houseno!=''">
+       		AND h.`houseno` LIKE CONCAT ('%',#{houseno},'%')
+      	</if>
+      	<if test="phone!=''">
+       		AND t.`phone` LIKE CONCAT ('%',#{phone},'%')
+      	</if>
+      	<if test="usercardno!=''">
+       		AND t.`usercardno` LIKE CONCAT ('%',#{usercardno},'%')
+      	</if>
+  </select> 
+  
+   <sql id="Base_Column_List">
+    tenementid, comecause, cometime, identityphoto, idnumber, maritalstatus, nation, 
+    phone, politicsstatus, remark, sex, telephone, unit, usercardno, useremail, username, 
+    userphoto, userqq, userwx, buildingid, communityid, houseid, audit_id, tenement_state_id, 
+    emergency_id, registeredId
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tenement
+    where tenementid = #{tenementid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tenement
+    where tenementid = #{tenementid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.fcz.entity.Tenement">
+    insert into tenement (tenementid, comecause, cometime, 
+      identityphoto, idnumber, maritalstatus, 
+      nation, phone, politicsstatus, 
+      remark, sex, telephone, 
+      unit, usercardno, useremail, 
+      username, userphoto, userqq, 
+      userwx, buildingid, communityid, 
+      houseid, audit_id, tenement_state_id, 
+      emergency_id, registeredId)
+    values (#{tenementid,jdbcType=INTEGER}, #{comecause,jdbcType=VARCHAR}, #{cometime,jdbcType=TIMESTAMP}, 
+      #{identityphoto,jdbcType=VARCHAR}, #{idnumber,jdbcType=VARCHAR}, #{maritalstatus,jdbcType=VARCHAR}, 
+      #{nation,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{politicsstatus,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, 
+      #{unit,jdbcType=VARCHAR}, #{usercardno,jdbcType=VARCHAR}, #{useremail,jdbcType=VARCHAR}, 
+      #{username,jdbcType=VARCHAR}, #{userphoto,jdbcType=VARCHAR}, #{userqq,jdbcType=INTEGER}, 
+      #{userwx,jdbcType=VARCHAR}, #{buildingid,jdbcType=INTEGER}, #{communityid,jdbcType=INTEGER}, 
+      #{houseid,jdbcType=INTEGER}, #{auditId,jdbcType=INTEGER}, #{tenementStateId,jdbcType=INTEGER}, 
+      #{emergencyId,jdbcType=INTEGER}, #{registeredid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fcz.entity.Tenement">
+    insert into tenement
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tenementid != null">
+        tenementid,
+      </if>
+      <if test="comecause != null">
+        comecause,
+      </if>
+      <if test="cometime != null">
+        cometime,
+      </if>
+      <if test="identityphoto != null">
+        identityphoto,
+      </if>
+      <if test="idnumber != null">
+        idnumber,
+      </if>
+      <if test="maritalstatus != null">
+        maritalstatus,
+      </if>
+      <if test="nation != null">
+        nation,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="politicsstatus != null">
+        politicsstatus,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="telephone != null">
+        telephone,
+      </if>
+      <if test="unit != null">
+        unit,
+      </if>
+      <if test="usercardno != null">
+        usercardno,
+      </if>
+      <if test="useremail != null">
+        useremail,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="userphoto != null">
+        userphoto,
+      </if>
+      <if test="userqq != null">
+        userqq,
+      </if>
+      <if test="userwx != null">
+        userwx,
+      </if>
+      <if test="buildingid != null">
+        buildingid,
+      </if>
+      <if test="communityid != null">
+        communityid,
+      </if>
+      <if test="houseid != null">
+        houseid,
+      </if>
+      <if test="auditId != null">
+        audit_id,
+      </if>
+      <if test="tenementStateId != null">
+        tenement_state_id,
+      </if>
+      <if test="emergencyId != null">
+        emergency_id,
+      </if>
+      <if test="registeredid != null">
+        registeredId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tenementid != null">
+        #{tenementid,jdbcType=INTEGER},
+      </if>
+      <if test="comecause != null">
+        #{comecause,jdbcType=VARCHAR},
+      </if>
+      <if test="cometime != null">
+        #{cometime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="identityphoto != null">
+        #{identityphoto,jdbcType=VARCHAR},
+      </if>
+      <if test="idnumber != null">
+        #{idnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="maritalstatus != null">
+        #{maritalstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="nation != null">
+        #{nation,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="politicsstatus != null">
+        #{politicsstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null">
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="usercardno != null">
+        #{usercardno,jdbcType=VARCHAR},
+      </if>
+      <if test="useremail != null">
+        #{useremail,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userphoto != null">
+        #{userphoto,jdbcType=VARCHAR},
+      </if>
+      <if test="userqq != null">
+        #{userqq,jdbcType=INTEGER},
+      </if>
+      <if test="userwx != null">
+        #{userwx,jdbcType=VARCHAR},
+      </if>
+      <if test="buildingid != null">
+        #{buildingid,jdbcType=INTEGER},
+      </if>
+      <if test="communityid != null">
+        #{communityid,jdbcType=INTEGER},
+      </if>
+      <if test="houseid != null">
+        #{houseid,jdbcType=INTEGER},
+      </if>
+      <if test="auditId != null">
+        #{auditId,jdbcType=INTEGER},
+      </if>
+      <if test="tenementStateId != null">
+        #{tenementStateId,jdbcType=INTEGER},
+      </if>
+      <if test="emergencyId != null">
+        #{emergencyId,jdbcType=INTEGER},
+      </if>
+      <if test="registeredid != null">
+        #{registeredid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fcz.entity.Tenement">
+    update tenement
+    <set>
+      <if test="comecause != null">
+        comecause = #{comecause,jdbcType=VARCHAR},
+      </if>
+      <if test="cometime != null">
+        cometime = #{cometime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="identityphoto != null">
+        identityphoto = #{identityphoto,jdbcType=VARCHAR},
+      </if>
+      <if test="idnumber != null">
+        idnumber = #{idnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="maritalstatus != null">
+        maritalstatus = #{maritalstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="nation != null">
+        nation = #{nation,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="politicsstatus != null">
+        politicsstatus = #{politicsstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null">
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="usercardno != null">
+        usercardno = #{usercardno,jdbcType=VARCHAR},
+      </if>
+      <if test="useremail != null">
+        useremail = #{useremail,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userphoto != null">
+        userphoto = #{userphoto,jdbcType=VARCHAR},
+      </if>
+      <if test="userqq != null">
+        userqq = #{userqq,jdbcType=INTEGER},
+      </if>
+      <if test="userwx != null">
+        userwx = #{userwx,jdbcType=VARCHAR},
+      </if>
+      <if test="buildingid != null">
+        buildingid = #{buildingid,jdbcType=INTEGER},
+      </if>
+      <if test="communityid != null">
+        communityid = #{communityid,jdbcType=INTEGER},
+      </if>
+      <if test="houseid != null">
+        houseid = #{houseid,jdbcType=INTEGER},
+      </if>
+      <if test="auditId != null">
+        audit_id = #{auditId,jdbcType=INTEGER},
+      </if>
+      <if test="tenementStateId != null">
+        tenement_state_id = #{tenementStateId,jdbcType=INTEGER},
+      </if>
+      <if test="emergencyId != null">
+        emergency_id = #{emergencyId,jdbcType=INTEGER},
+      </if>
+      <if test="registeredid != null">
+        registeredId = #{registeredid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where tenementid = #{tenementid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fcz.entity.Tenement">
+    update tenement
+    set comecause = #{comecause,jdbcType=VARCHAR},
+      cometime = #{cometime,jdbcType=TIMESTAMP},
+      identityphoto = #{identityphoto,jdbcType=VARCHAR},
+      idnumber = #{idnumber,jdbcType=VARCHAR},
+      maritalstatus = #{maritalstatus,jdbcType=VARCHAR},
+      nation = #{nation,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      politicsstatus = #{politicsstatus,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      telephone = #{telephone,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      usercardno = #{usercardno,jdbcType=VARCHAR},
+      useremail = #{useremail,jdbcType=VARCHAR},
+      username = #{username,jdbcType=VARCHAR},
+      userphoto = #{userphoto,jdbcType=VARCHAR},
+      userqq = #{userqq,jdbcType=INTEGER},
+      userwx = #{userwx,jdbcType=VARCHAR},
+      buildingid = #{buildingid,jdbcType=INTEGER},
+      communityid = #{communityid,jdbcType=INTEGER},
+      houseid = #{houseid,jdbcType=INTEGER},
+      audit_id = #{auditId,jdbcType=INTEGER},
+      tenement_state_id = #{tenementStateId,jdbcType=INTEGER},
+      emergency_id = #{emergencyId,jdbcType=INTEGER},
+      registeredId = #{registeredid,jdbcType=INTEGER}
+    where tenementid = #{tenementid,jdbcType=INTEGER}
+  </update>
+</mapper>

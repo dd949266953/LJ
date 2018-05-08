@@ -1,0 +1,34 @@
+package com.fcz.service.dataCenterService;
+
+import java.util.List;
+
+
+
+import com.fcz.entity.Tenement;
+
+/**
+ * 住户逻辑接口
+ * @author dell
+ *
+ */
+public interface TenementService {
+	/**
+     * 根据 用户名  房号 电话 业主卡号 查询住户
+     * @param username
+     * @param houseno
+     * @param phone
+     * @param usercardno
+     * @return
+     */
+    List<Tenement> getTenementBySelect(String username,String houseno,String phone,String usercardno);
+	
+    /**
+     * 根据 用户名  房号 电话 业主卡号 查询住户总数
+     * @param username
+     * @param houseno
+     * @param phone
+     * @param usercardno
+     * @return
+     */
+    long getTenementCountBySelect(String username,String houseno,String phone,String usercardno);
+}

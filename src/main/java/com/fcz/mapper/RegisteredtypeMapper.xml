@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fcz.dao.RegisteredtypeMapper">
+  <resultMap id="BaseResultMap" type="com.fcz.entity.Registeredtype">
+    <id column="registeredId" jdbcType="INTEGER" property="registeredid" />
+    <result column="registeredName" jdbcType="VARCHAR" property="registeredname" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    registeredId, registeredName
+  </sql>
+  <!-- 查询全部户口类型 -->
+  <select id="getAll"  resultType="com.fcz.entity.Registeredtype">
+    select 
+    <include refid="Base_Column_List" />
+    from registeredtype
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from registeredtype
+    where registeredId = #{registeredid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from registeredtype
+    where registeredId = #{registeredid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.fcz.entity.Registeredtype">
+    insert into registeredtype (registeredId, registeredName)
+    values (#{registeredid,jdbcType=INTEGER}, #{registeredname,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fcz.entity.Registeredtype">
+    insert into registeredtype
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="registeredid != null">
+        registeredId,
+      </if>
+      <if test="registeredname != null">
+        registeredName,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="registeredid != null">
+        #{registeredid,jdbcType=INTEGER},
+      </if>
+      <if test="registeredname != null">
+        #{registeredname,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fcz.entity.Registeredtype">
+    update registeredtype
+    <set>
+      <if test="registeredname != null">
+        registeredName = #{registeredname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where registeredId = #{registeredid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fcz.entity.Registeredtype">
+    update registeredtype
+    set registeredName = #{registeredname,jdbcType=VARCHAR}
+    where registeredId = #{registeredid,jdbcType=INTEGER}
+  </update>
+</mapper>

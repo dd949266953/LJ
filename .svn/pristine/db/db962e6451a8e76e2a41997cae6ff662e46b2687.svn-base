@@ -1,0 +1,192 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<%
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
+%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE html>
+<html>
+
+<head>
+<base href="<%=basePath%>">
+<title>添加住户其他</title>
+<link href="css/dataCenter/addCommunity.css" rel="stylesheet" />
+<link href="layui/css/layui.css" rel="stylesheet">
+<link href="css/admin_public.css" rel="stylesheet" />
+
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=UOEhL3r0CIXKBpQmibW2wwy6uL7T0UGO"></script>
+<script type="text/javascript" src="js/jquery-3.2.1.js"></script>
+</head>
+
+<body>
+
+	<section style="width: 96%; background-color: white; margin: 0px auto;">
+		<!--
+              	作者：ADD
+              	时间：2018-04-12
+              	描述：添加小区1
+              -->
+		<header>
+			 <h2 id="firsth3">住户其他信息&nbsp;	<a href="#"><span class="pass">(跳过该步骤)</span></a>
+              
+              </h2>	
+		</header>
+		<!--主体 -->
+		<div id="subject" style="margin: 20px 0 40px 0">
+			<fm:form id="fm" action="##" class="layui-form layui-form-pane" 
+			onsubmit="return false" method="post" modelAttribute="Community" enctype="multipart/form-data">
+			<div class="row">
+					<label style="vertical-align: top;">住户照片:</label>
+					<section class="upload-area">
+						<div class="upload" onmousemove="upLoadShow(this)"
+							onmouseout="upLoadHide(this)">
+							<div class="bg" onclick="del(this)">
+								<div class="absolute background"></div>
+								<i class="iconfont absolute i_style">&#xe659;</i>
+							</div>
+							<img class="absolute" id="portrait" src="" style="display: none;" />
+							<input name="communityLogo" type="file" class="file"
+								onchange="showPreview(this)" style="opacity: 0;" /> +
+						</div>
+
+						<p id="background">
+			 					图片大小不可超过2M.
+			 			</p>
+
+					</section>
+
+				</div>
+				<div class="row">
+					<label>qq号:</label> 
+						<input class="shortInput" type="text" placeholder="请输入住户QQ号" name="communityServicePhone" />
+				</div>
+				<div class="row">
+					<label>微信号:</label> 
+					<input class="shortInput" type="text" placeholder="请输入住户微信号" name="communityServicePhone" />
+				</div>
+				<div class="row">
+					<label>电子邮箱:</label>  <input class="shortInput" type="text" placeholder="请输入住户电子邮箱" name="communityAdmin" />
+				</div>
+				<div class="row">
+					<label>紧急联系人:</label>  <input class="shortInput" type="text" placeholder="请输入住户紧急联系人" name="communityAdminPhone" />
+				</div>
+				<div class="row">
+					<label>紧急联系人电话:</label>  <input class="shortInput" type="text" placeholder="请输入住户紧急联系人电话" name="communityAdminPhone" />
+				</div>
+				<div class="row">
+					<label>民族:</label>  <input class="shortInput" type="text"  name="communityAdminPhone" />
+				</div>
+				<div class="row">
+					<label>政治面貌:</label>  <input class="shortInput" type="text" name="communityAdminPhone" />
+				</div>
+				<div class="row">
+					<label>身份证号:</label>  <input class="shortInput" type="text" name="communityAdminPhone" />
+				</div>
+				<div class="row">
+					<label style="vertical-align: top;">身份证图片:</label>
+					<section class="upload-area">
+						<div class="upload" onmousemove="upLoadShow(this)" onmouseout="upLoadHide(this)">
+							<div class="bg" onclick="del(this)">
+								<div class="absolute background"></div>
+								<i class="iconfont absolute i_style">&#xe659;</i>
+							</div>
+							<img class="absolute" id="portrait" src="" style="display: none;" />
+							<input name="communityLogo" type="file" class="file" onchange="showPreview(this)" style="opacity: 0;" /> +
+						</div>
+
+						<div class="uploadtext">
+			 					图片大小不可超过2M.
+			 				</div>
+
+					</section>
+
+				</div>
+			
+				<div class="row">
+				<label>户口类型:</label>  
+					<div class="layui-form-item shortInput select layui-form" lay-filter="hukou" >
+					
+						<select id="Registeredtype" name="interest" >
+							
+						</select>
+					</div>
+					
+					
+					
+					
+				</div>
+			 	<div class="row">
+					<label>户籍地址:</label>  <input class="shortInput" type="text" name="communityAdmin" />
+				</div>
+				<div class="row">
+					<label>暂住证号码:</label>  <input class="shortInput" type="text" name="communityAdminPhone" />
+			 	</div>
+			 <div class="row">
+					<label>居住类型:</label>  
+					<div class="shortInput select layui-form" lay-filter="juzhu">
+					<select id="TenementState" name="interest" >
+			 				
+			 		</select>
+			 		</div>
+				</div>
+				<div class="row">
+					<label>宠物信息:</label>  <input class="shortInput" type="text" name="communityAdminPhone" />
+				</div>
+				<div class="row">
+					<label>备注:</label>  <input class="shortInput" type="text" name="communityAdminPhone" />
+				</div>
+				<div  class="row">
+					<label></label>
+					<button id="save"  class="button">
+						
+							保存
+					</button>
+					<button onclick="javascript:history.go(-1)" class="button">返回</button>
+				</div>
+			</fm:form>
+			
+
+
+		</div>
+
+	</section>
+	<script src="layui/layui.js"></script>
+	<script type="text/javascript" src="layui/layui.all.js"></script>
+	<script type="text/javascript" src="js/uploadPhoto.js"></script>
+	<script type="text/javascript">
+	layui.use(['form'], function(){
+		  var form = layui.form
+		  
+		  var index='<option value="0">请选择</option>';
+		  //户口类型加载
+		  $.post('Registeredtype/getAllRegisteredType',function(result){
+			  $("#Registeredtype").append(index);
+				$.each(result,function(i,e){
+					var option='<option value="'+e.registeredid+'">'+e.registeredname+'</option>';
+					
+					$("#Registeredtype").append(option);	 
+		  		})
+		  		 layui.form.render('select','hukou');
+		  })
+		  //居住类型加载
+		  $.post('tenementState/getAllTenementState',function(result){
+			  $("#TenementState").append(index);
+			  $.each(result,function(i,e){
+					var option='<option value="'+e.tenementStateId+'">'+e.tenementName+'</option>';
+					
+					$("#TenementState").append(option);	 
+		  		})
+		  		layui.form.render('select','juzhu');
+		  })
+		  
+		  
+	});
+
+	
+	</script>
+
+</body>
+
+</html>

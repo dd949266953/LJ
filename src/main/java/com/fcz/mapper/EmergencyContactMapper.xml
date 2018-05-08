@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fcz.dao.EmergencyContactMapper">
+  <resultMap id="BaseResultMap" type="com.fcz.entity.EmergencyContact">
+    <id column="emergency_id" jdbcType="INTEGER" property="emergencyId" />
+    <result column="emergency_name" jdbcType="VARCHAR" property="emergencyName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    emergency_id, emergency_name
+  </sql>
+  <select id="getAll" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from emergency_contact
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from emergency_contact
+    where emergency_id = #{emergencyId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from emergency_contact
+    where emergency_id = #{emergencyId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.fcz.entity.EmergencyContact">
+    insert into emergency_contact (emergency_id, emergency_name)
+    values (#{emergencyId,jdbcType=INTEGER}, #{emergencyName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fcz.entity.EmergencyContact">
+    insert into emergency_contact
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="emergencyId != null">
+        emergency_id,
+      </if>
+      <if test="emergencyName != null">
+        emergency_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="emergencyId != null">
+        #{emergencyId,jdbcType=INTEGER},
+      </if>
+      <if test="emergencyName != null">
+        #{emergencyName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fcz.entity.EmergencyContact">
+    update emergency_contact
+    <set>
+      <if test="emergencyName != null">
+        emergency_name = #{emergencyName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where emergency_id = #{emergencyId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fcz.entity.EmergencyContact">
+    update emergency_contact
+    set emergency_name = #{emergencyName,jdbcType=VARCHAR}
+    where emergency_id = #{emergencyId,jdbcType=INTEGER}
+  </update>
+</mapper>

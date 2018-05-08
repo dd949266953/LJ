@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fcz.dao.HouseMapper">
+	<resultMap id="BaseResultMap" type="com.fcz.entity.House">
+		<id column="houseid" jdbcType="INTEGER" property="houseid" />
+		<result column="accessory" jdbcType="VARCHAR" property="accessory" />
+		<result column="floor" jdbcType="INTEGER" property="floor" />
+		<result column="handingintheroom" jdbcType="TIMESTAMP"
+			property="handingintheroom" />
+		<result column="houseno" jdbcType="VARCHAR" property="houseno" />
+		<result column="houseunit" jdbcType="VARCHAR" property="houseunit" />
+		<result column="privatearea" jdbcType="DOUBLE" property="privatearea" />
+		<result column="property" jdbcType="INTEGER" property="property" />
+		<result column="publicarea" jdbcType="DOUBLE" property="publicarea" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="buildingid" jdbcType="INTEGER" property="buildingid" />
+		<result column="carportid" jdbcType="INTEGER" property="carportid" />
+		<result column="community_id" jdbcType="INTEGER" property="communityId" />
+		<result column="house_stateid" jdbcType="INTEGER" property="houseStateid" />
+		<result column="tenementid" jdbcType="INTEGER" property="tenementid" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		houseid, accessory, floor, handingintheroom, houseno, houseunit, privatearea,
+		property,
+		publicarea, remark, buildingid, carportid, community_id, house_stateid,
+		tenementid
+	</sql>
+
+
+	<resultMap id="houseMap" type="com.fcz.entity.House">
+		<id column="houseid" jdbcType="INTEGER" property="houseid" />
+		<result column="accessory" jdbcType="VARCHAR" property="accessory" />
+		<result column="floor" jdbcType="INTEGER" property="floor" />
+		<result column="handingintheroom" jdbcType="TIMESTAMP"
+			property="handingintheroom" />
+		<result column="houseno" jdbcType="VARCHAR" property="houseno" />
+		<result column="houseunit" jdbcType="VARCHAR" property="houseunit" />
+		<result column="privatearea" jdbcType="DOUBLE" property="privatearea" />
+		<result column="property" jdbcType="INTEGER" property="property" />
+		<result column="publicarea" jdbcType="DOUBLE" property="publicarea" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="tenementid" jdbcType="INTEGER" property="tenementid" />
+		<result column="carportid" jdbcType="INTEGER" property="carportid" />
+		<association property="building" javaType="com.fcz.entity.Building">
+			<result property="buildingid" column="buildingid" />
+			<result property="buildingname" column="buildingname" />
+		</association>	
+		<association property="community" javaType="com.fcz.entity.Community">
+			<result property="communityId" column="community_id" />
+			<result property="communityName" column="community_name" />
+		</association>
+		<association property="houseState" javaType="com.fcz.entity.HouseState">
+			<result property="houseStateid" column="house_stateid" />
+			<result property="housestatetype" column="housestatetype" />
+		</association>
+	</resultMap>
+
+	<select id="getAllHouse" resultMap="houseMap" parameterType="java.lang.String">
+		SELECT h.*,c.community_name,b.buildingname,t.housestatetype from house h
+		INNER JOIN community c on c.community_id=h.community_id
+		INNER JOIN building b on b.buildingid=h.buildingid
+		INNER JOIN house_state t ON t.house_stateid=h.house_stateid
+		where 1=1
+		<if test="houseno!=''">
+			AND houseno LIKE CONCAT ('%',#{houseno},'%')
+		</if>
+
+	</select>
+	
+   <select id="getHouseCount"  parameterType="java.lang.String" resultType="java.lang.Long" >
+		SELECT count(1) from house		
+		where 1=1
+		<if test="houseno!=''">
+			AND houseno LIKE CONCAT ('%',#{houseno},'%')
+		</if>
+	</select>
+	<resultMap id="houseMapByBuilding" type="com.fcz.entity.House">
+		<id column="houseid" jdbcType="INTEGER" property="houseid" />		
+		<result column="houseno" jdbcType="VARCHAR" property="houseno" />		
+	</resultMap>
+    <!-- 根据楼宇id查询房屋单元 -->
+    <select id="getHouseUnitByBuilding" parameterType="java.lang.Integer" resultMap="houseMapByBuilding">
+    SELECT houseid,houseunit from house WHERE buildingid=#{buildingId} GROUP BY houseunit ORDER BY houseunit+0 
+    </select>
+    <!-- 根据单元查询房屋 -->
+    <select id="getHouseByUnit" parameterType="java.lang.Integer" resultMap="houseMapByBuilding">
+    SELECT houseid,houseno from house WHERE houseunit=#{houseunit} GROUP BY houseno ORDER BY  houseno+0 
+    </select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from house
+		where houseid = #{houseid,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from house
+		where houseid = #{houseid,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.fcz.entity.House">
+		insert into house (houseid, accessory, floor,
+		handingintheroom, houseno, houseunit,
+		privatearea, property, publicarea,
+		remark, buildingid, carportid,
+		community_id, house_stateid, tenementid
+		)
+		values (#{houseid,jdbcType=INTEGER}, #{accessory,jdbcType=VARCHAR},
+		#{floor,jdbcType=INTEGER},
+		#{handingintheroom,jdbcType=TIMESTAMP}, #{houseno,jdbcType=VARCHAR}, #{houseunit,jdbcType=VARCHAR},
+		#{privatearea,jdbcType=DOUBLE}, #{property,jdbcType=INTEGER},
+		#{publicarea,jdbcType=DOUBLE},
+		#{remark,jdbcType=VARCHAR}, #{buildingid,jdbcType=INTEGER}, #{carportid,jdbcType=INTEGER},
+		#{communityId,jdbcType=INTEGER}, #{houseStateid,jdbcType=INTEGER},
+		#{tenementid,jdbcType=INTEGER}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.fcz.entity.House">
+		insert into house
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="houseid != null">
+				houseid,
+			</if>
+			<if test="accessory != null">
+				accessory,
+			</if>
+			<if test="floor != null">
+				floor,
+			</if>
+			<if test="handingintheroom != null">
+				handingintheroom,
+			</if>
+			<if test="houseno != null">
+				houseno,
+			</if>
+			<if test="houseunit != null">
+				houseunit,
+			</if>
+			<if test="privatearea != null">
+				privatearea,
+			</if>
+			<if test="property != null">
+				property,
+			</if>
+			<if test="publicarea != null">
+				publicarea,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="buildingid != null">
+				buildingid,
+			</if>
+			<if test="carportid != null">
+				carportid,
+			</if>
+			<if test="communityId != null">
+				community_id,
+			</if>
+			<if test="houseStateid != null">
+				house_stateid,
+			</if>
+			<if test="tenementid != null">
+				tenementid,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="houseid != null">
+				#{houseid,jdbcType=INTEGER},
+			</if>
+			<if test="accessory != null">
+				#{accessory,jdbcType=VARCHAR},
+			</if>
+			<if test="floor != null">
+				#{floor,jdbcType=INTEGER},
+			</if>
+			<if test="handingintheroom != null">
+				#{handingintheroom,jdbcType=TIMESTAMP},
+			</if>
+			<if test="houseno != null">
+				#{houseno,jdbcType=VARCHAR},
+			</if>
+			<if test="houseunit != null">
+				#{houseunit,jdbcType=VARCHAR},
+			</if>
+			<if test="privatearea != null">
+				#{privatearea,jdbcType=DOUBLE},
+			</if>
+			<if test="property != null">
+				#{property,jdbcType=INTEGER},
+			</if>
+			<if test="publicarea != null">
+				#{publicarea,jdbcType=DOUBLE},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="buildingid != null">
+				#{buildingid,jdbcType=INTEGER},
+			</if>
+			<if test="carportid != null">
+				#{carportid,jdbcType=INTEGER},
+			</if>
+			<if test="communityId != null">
+				#{communityId,jdbcType=INTEGER},
+			</if>
+			<if test="houseStateid != null">
+				#{houseStateid,jdbcType=INTEGER},
+			</if>
+			<if test="tenementid != null">
+				#{tenementid,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.fcz.entity.House">
+		update house
+		<set>
+			<if test="accessory != null">
+				accessory = #{accessory,jdbcType=VARCHAR},
+			</if>
+			<if test="floor != null">
+				floor = #{floor,jdbcType=INTEGER},
+			</if>
+			<if test="handingintheroom != null">
+				handingintheroom = #{handingintheroom,jdbcType=TIMESTAMP},
+			</if>
+			<if test="houseno != null">
+				houseno = #{houseno,jdbcType=VARCHAR},
+			</if>
+			<if test="houseunit != null">
+				houseunit = #{houseunit,jdbcType=VARCHAR},
+			</if>
+			<if test="privatearea != null">
+				privatearea = #{privatearea,jdbcType=DOUBLE},
+			</if>
+			<if test="property != null">
+				property = #{property,jdbcType=INTEGER},
+			</if>
+			<if test="publicarea != null">
+				publicarea = #{publicarea,jdbcType=DOUBLE},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="buildingid != null">
+				buildingid = #{buildingid,jdbcType=INTEGER},
+			</if>
+			<if test="carportid != null">
+				carportid = #{carportid,jdbcType=INTEGER},
+			</if>
+			<if test="communityId != null">
+				community_id = #{communityId,jdbcType=INTEGER},
+			</if>
+			<if test="houseStateid != null">
+				house_stateid = #{houseStateid,jdbcType=INTEGER},
+			</if>
+			<if test="tenementid != null">
+				tenementid = #{tenementid,jdbcType=INTEGER},
+			</if>
+		</set>
+		where houseid = #{houseid,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.fcz.entity.House">
+		update house
+		set accessory = #{accessory,jdbcType=VARCHAR},
+		floor = #{floor,jdbcType=INTEGER},
+		handingintheroom = #{handingintheroom,jdbcType=TIMESTAMP},
+		houseno = #{houseno,jdbcType=VARCHAR},
+		houseunit = #{houseunit,jdbcType=VARCHAR},
+		privatearea = #{privatearea,jdbcType=DOUBLE},
+		property = #{property,jdbcType=INTEGER},
+		publicarea = #{publicarea,jdbcType=DOUBLE},
+		remark = #{remark,jdbcType=VARCHAR},
+		buildingid = #{buildingid,jdbcType=INTEGER},
+		carportid = #{carportid,jdbcType=INTEGER},
+		community_id = #{communityId,jdbcType=INTEGER},
+		house_stateid = #{houseStateid,jdbcType=INTEGER},
+		tenementid = #{tenementid,jdbcType=INTEGER}
+		where houseid = #{houseid,jdbcType=INTEGER}
+	</update>
+</mapper>

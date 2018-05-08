@@ -1,0 +1,17 @@
+package com.fcz.dao;
+
+import com.fcz.entity.TenementState;
+
+public interface TenementStateMapper {
+    int deleteByPrimaryKey(Integer tenementStateId);
+
+    int insert(TenementState record);
+
+    int insertSelective(TenementState record);
+
+    TenementState selectByPrimaryKey(Integer tenementStateId);
+
+    int updateByPrimaryKeySelective(TenementState record);
+
+    int updateByPrimaryKey(TenementState record);
+}

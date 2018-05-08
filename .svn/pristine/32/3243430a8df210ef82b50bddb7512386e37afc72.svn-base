@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fcz.dao.CommunityMapper">
+  <resultMap id="BaseResultMap" type="com.fcz.entity.Community">
+    <id column="community_id" jdbcType="INTEGER" property="communityId" />
+    <result column="community_address" jdbcType="VARCHAR" property="communityAddress" />
+    <result column="community_admin" jdbcType="VARCHAR" property="communityAdmin" />
+    <result column="community_admin_phone" jdbcType="VARCHAR" property="communityAdminPhone" />
+    <result column="community_image" jdbcType="VARCHAR" property="communityImage" />
+    <result column="community_logo" jdbcType="VARCHAR" property="communityLogo" />
+    <result column="community_name" jdbcType="VARCHAR" property="communityName" />
+    <result column="community_service_phone" jdbcType="VARCHAR" property="communityServicePhone" />
+  </resultMap>
+  <resultMap type="com.fcz.entity.Community" id="names">
+       <id column="community_id" jdbcType="INTEGER" property="communityId" />
+       <result column="community_name" jdbcType="VARCHAR" property="communityName" />
+  </resultMap>
+  <!-- 查询所有 -->
+  <select id="getCommunityByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+       SELECT * FROM community WHERE 1=1
+      <if test="communityName!=''">
+       and community_name LIKE CONCAT ('%',#{communityName},'%')
+      </if>
+  </select>
+  <!-- 查询数量 -->
+  <select id="getCommunityCountByName" resultType="java.lang.Long" parameterType="java.lang.String">
+    SELECT COUNT(1) FROM community where 1=1
+      <if test="communityName!=''">
+       and community_name LIKE CONCAT ('%',#{communityName},'%')
+      </if>
+  </select>
+  <select id="getAllCommunityName" resultMap="names">
+   SELECT community_id,community_name FROM community 
+  </select>
+ 
+  
+  <sql id="Base_Column_List">
+    community_id, community_address, community_admin, community_admin_phone, community_image, 
+    community_logo, community_name, community_service_phone
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from community
+    where community_id = #{communityId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from community
+    where community_id = #{communityId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.fcz.entity.Community">
+    insert into community (community_id, community_address, community_admin, 
+      community_admin_phone, community_image, community_logo, 
+      community_name, community_service_phone)
+    values (#{communityId,jdbcType=INTEGER}, #{communityAddress,jdbcType=VARCHAR}, #{communityAdmin,jdbcType=VARCHAR}, 
+      #{communityAdminPhone,jdbcType=VARCHAR}, #{communityImage,jdbcType=VARCHAR}, #{communityLogo,jdbcType=VARCHAR}, 
+      #{communityName,jdbcType=VARCHAR}, #{communityServicePhone,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fcz.entity.Community">
+    insert into community
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="communityId != null">
+        community_id,
+      </if>
+      <if test="communityAddress != null">
+        community_address,
+      </if>
+      <if test="communityAdmin != null">
+        community_admin,
+      </if>
+      <if test="communityAdminPhone != null">
+        community_admin_phone,
+      </if>
+      <if test="communityImage != null">
+        community_image,
+      </if>
+      <if test="communityLogo != null">
+        community_logo,
+      </if>
+      <if test="communityName != null">
+        community_name,
+      </if>
+      <if test="communityServicePhone != null">
+        community_service_phone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="communityId != null">
+        #{communityId,jdbcType=INTEGER},
+      </if>
+      <if test="communityAddress != null">
+        #{communityAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="communityAdmin != null">
+        #{communityAdmin,jdbcType=VARCHAR},
+      </if>
+      <if test="communityAdminPhone != null">
+        #{communityAdminPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="communityImage != null">
+        #{communityImage,jdbcType=VARCHAR},
+      </if>
+      <if test="communityLogo != null">
+        #{communityLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="communityName != null">
+        #{communityName,jdbcType=VARCHAR},
+      </if>
+      <if test="communityServicePhone != null">
+        #{communityServicePhone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fcz.entity.Community">
+    update community
+    <set>
+      <if test="communityAddress != null">
+        community_address = #{communityAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="communityAdmin != null">
+        community_admin = #{communityAdmin,jdbcType=VARCHAR},
+      </if>
+      <if test="communityAdminPhone != null">
+        community_admin_phone = #{communityAdminPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="communityImage != null">
+        community_image = #{communityImage,jdbcType=VARCHAR},
+      </if>
+      <if test="communityLogo != null">
+        community_logo = #{communityLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="communityName != null">
+        community_name = #{communityName,jdbcType=VARCHAR},
+      </if>
+      <if test="communityServicePhone != null">
+        community_service_phone = #{communityServicePhone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where community_id = #{communityId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fcz.entity.Community">
+    update community
+    set community_address = #{communityAddress,jdbcType=VARCHAR},
+      community_admin = #{communityAdmin,jdbcType=VARCHAR},
+      community_admin_phone = #{communityAdminPhone,jdbcType=VARCHAR},
+      community_image = #{communityImage,jdbcType=VARCHAR},
+      community_logo = #{communityLogo,jdbcType=VARCHAR},
+      community_name = #{communityName,jdbcType=VARCHAR},
+      community_service_phone = #{communityServicePhone,jdbcType=VARCHAR}
+    where community_id = #{communityId,jdbcType=INTEGER}
+  </update>
+</mapper>

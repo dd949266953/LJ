@@ -1,0 +1,126 @@
+* {
+	margin: 0;
+	padding: 0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+ul {
+	list-style-type: none;
+}
+
+a {
+	color: #f39800;
+	text-decoration: none;
+}
+
+
+/** =======================
+ * Contenedor Principal
+ ===========================*/
+
+.accordion {
+	width: 100%;
+	max-width: 200px;
+}
+
+.accordion .link {
+	cursor: pointer;
+	display: block;
+	padding: 15px 15px 15px 55px;
+	color: #4D4D4D;
+	font-size: 14px;
+	font-weight: 500;
+	position: relative;
+	-webkit-transition: all 0.4s ease;
+	-o-transition: all 0.4s ease;
+	transition: all 0.4s ease;
+}
+
+.accordion li:last-child .link {
+	border-bottom: 0;
+}
+
+.accordion li {
+	cursor: pointer;
+}
+
+.accordion li i {
+	position: absolute;
+	top: 16px;
+	left: 18px;
+	font-size: 18px;
+	color: #595959;
+	-webkit-transition: all 0.4s ease;
+	-o-transition: all 0.4s ease;
+	transition: all 0.4s ease;
+}
+
+.accordion li i.fa-chevron-down {
+	right: 12px;
+	left: auto;
+	font-size: 16px;
+}
+
+.accordion .link:hover {
+	background-color: rgb(244, 244, 244);
+}
+
+.accordion li.open i.fa-chevron-down {
+	-webkit-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+	-o-transform: rotate(180deg);
+	transform: rotate(180deg);
+}
+
+
+/**
+ * Submenu
+ -----------------------------*/
+
+.submenu {
+	
+	font-size: 14px;
+}
+
+.submenu a {
+	display: block;
+	text-decoration: none;
+	color: gray;
+	padding: 12px;
+	padding-left: 55px;
+	-webkit-transition: all 0.25s ease;
+	-o-transition: all 0.25s ease;
+	transition: all 0.25s ease;
+}
+
+.submenu a:hover,
+.submenu li.current a {
+	color: black;
+}
+
+.account-l {
+	width: 200px;
+}
+
+#left-nav:hover {
+	width: 200px;
+	transition: width 1s;
+}
+
+.close {
+	width: 55px;
+	transition: width 1s;
+}
+
+#left-nav {
+	border: 1px solid gainsboro;
+	width: 55px;
+	z-index: 2000;
+	position: fixed;
+	background: #fff;
+	box-shadow: 0 0 10px rgba(51, 51, 51, .38);
+}
+
+/*http://www.jq22.com*/

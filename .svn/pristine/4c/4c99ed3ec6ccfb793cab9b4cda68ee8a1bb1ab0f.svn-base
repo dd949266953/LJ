@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fcz.dao.CarMapper">
+  <resultMap id="BaseResultMap" type="com.fcz.entity.Car">
+    <id column="carid" jdbcType="INTEGER" property="carid" />
+    <result column="carcc" jdbcType="DOUBLE" property="carcc" />
+    <result column="carcolor" jdbcType="VARCHAR" property="carcolor" />
+    <result column="carno" jdbcType="VARCHAR" property="carno" />
+    <result column="carnumber" jdbcType="VARCHAR" property="carnumber" />
+    <result column="carphoto" jdbcType="VARCHAR" property="carphoto" />
+    <result column="cartype" jdbcType="INTEGER" property="cartype" />
+    <result column="drivinglicense" jdbcType="VARCHAR" property="drivinglicense" />
+    <result column="licence" jdbcType="VARCHAR" property="licence" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="stopcarno" jdbcType="VARCHAR" property="stopcarno" />
+    <result column="tenementid" jdbcType="INTEGER" property="tenementid" />
+    <result column="carportid" jdbcType="INTEGER" property="carportid" />
+  </resultMap>
+  
+    <resultMap id="MyResultMap" type="com.fcz.entity.Car">
+    <id column="carid" jdbcType="INTEGER" property="carid" />
+    <result column="carcc" jdbcType="DOUBLE" property="carcc" />
+    <result column="carcolor" jdbcType="VARCHAR" property="carcolor" />
+    <result column="carno" jdbcType="VARCHAR" property="carno" />
+    <result column="carnumber" jdbcType="VARCHAR" property="carnumber" />
+    <result column="carphoto" jdbcType="VARCHAR" property="carphoto" />
+    <result column="cartype" jdbcType="INTEGER" property="cartype" />
+    <result column="drivinglicense" jdbcType="VARCHAR" property="drivinglicense" />
+    <result column="licence" jdbcType="VARCHAR" property="licence" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="stopcarno" jdbcType="VARCHAR" property="stopcarno" />
+    <result column="tenementid" jdbcType="INTEGER" property="tenementid" />
+    <result column="carportid" jdbcType="INTEGER" property="carportid" />
+    
+    <association property="tenement" javaType="com.fcz.entity.Tenement">
+			<result property="tenementid" column="tenementid" />
+	</association>
+	    <association property="community" javaType="com.fcz.entity.Community">
+			<result property="communityId" column="community_id" />
+			<result property="communityName" column="community_name" />
+	</association>
+	    <association property="carport" javaType="com.fcz.entity.Carport">
+			<result property="carportid" column="carportid" />
+			<result property="area" column="area" />
+	</association>
+	    <association property="carPortState" javaType="com.fcz.entity.CarPortState">
+			<result property="carPortStateId" column="car_port_state_id" />
+			<result property="carPortStateName" column="car_port_state_name" />
+	</association>
+  </resultMap>
+  <sql id="Base_Column_List">
+    carid, carcc, carcolor, carno, carnumber, carphoto, cartype, drivinglicense, licence, 
+    remark, stopcarno, tenementid, carportid
+  </sql>
+  <select id="getCarCount" resultType="java.lang.Integer">
+  select count(1) from car
+  </select>
+  <select id="getCarStallMessage" resultMap="MyResultMap"> 
+SELECT c.carid,cm.community_name,c.carno,c.carnumber,cps.car_port_state_name,cp.area,c.remark,h.houseid,t.tenementid FROM car c 
+INNER JOIN tenement t on c.tenementid=t.tenementid
+INNER JOIN house h ON h.houseid=t.houseid
+INNER JOIN community cm ON h.community_id=cm.community_id
+INNER JOIN car_port_state cps on cps.car_port_state_id=c.carportid
+INNER JOIN carport cp on cp.car_port_state_id=cps.car_port_state_id
+WHERE 1=1
+      <if test="carno != ''">
+        and  c.carno like  CONCAT('%',#{carno},'%') 
+      </if>
+  </select>
+    <select id="getCarStallMessageByCarid" parameterType="java.lang.Integer" resultMap="MyResultMap"> 
+SELECT c.carid,cm.community_name,c.carno,c.carnumber,cps.car_port_state_name,cp.area,c.remark,h.houseid,t.tenementid FROM car c 
+INNER JOIN tenement t on c.tenementid=t.tenementid
+INNER JOIN house h ON h.houseid=t.houseid
+INNER JOIN community cm ON h.community_id=cm.community_id
+INNER JOIN car_port_state cps on cps.car_port_state_id=c.carportid
+INNER JOIN carport cp on cp.car_port_state_id=cps.car_port_state_id
+WHERE c.carid=#{carid}
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from car
+    where carid = #{carid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from car
+    where carid = #{carid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.fcz.entity.Car">
+    insert into car (carid, carcc, carcolor, 
+      carno, carnumber, carphoto, 
+      cartype, drivinglicense, licence, 
+      remark, stopcarno, tenementid, 
+      carportid)
+    values (#{carid,jdbcType=INTEGER}, #{carcc,jdbcType=DOUBLE}, #{carcolor,jdbcType=VARCHAR}, 
+      #{carno,jdbcType=VARCHAR}, #{carnumber,jdbcType=VARCHAR}, #{carphoto,jdbcType=VARCHAR}, 
+      #{cartype,jdbcType=INTEGER}, #{drivinglicense,jdbcType=VARCHAR}, #{licence,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{stopcarno,jdbcType=VARCHAR}, #{tenementid,jdbcType=INTEGER}, 
+      #{carportid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fcz.entity.Car">
+    insert into car
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="carid != null">
+        carid,
+      </if>
+      <if test="carcc != null">
+        carcc,
+      </if>
+      <if test="carcolor != null">
+        carcolor,
+      </if>
+      <if test="carno != null">
+        carno,
+      </if>
+      <if test="carnumber != null">
+        carnumber,
+      </if>
+      <if test="carphoto != null">
+        carphoto,
+      </if>
+      <if test="cartype != null">
+        cartype,
+      </if>
+      <if test="drivinglicense != null">
+        drivinglicense,
+      </if>
+      <if test="licence != null">
+        licence,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="stopcarno != null">
+        stopcarno,
+      </if>
+      <if test="tenementid != null">
+        tenementid,
+      </if>
+      <if test="carportid != null">
+        carportid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="carid != null">
+        #{carid,jdbcType=INTEGER},
+      </if>
+      <if test="carcc != null">
+        #{carcc,jdbcType=DOUBLE},
+      </if>
+      <if test="carcolor != null">
+        #{carcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="carno != null">
+        #{carno,jdbcType=VARCHAR},
+      </if>
+      <if test="carnumber != null">
+        #{carnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="carphoto != null">
+        #{carphoto,jdbcType=VARCHAR},
+      </if>
+      <if test="cartype != null">
+        #{cartype,jdbcType=INTEGER},
+      </if>
+      <if test="drivinglicense != null">
+        #{drivinglicense,jdbcType=VARCHAR},
+      </if>
+      <if test="licence != null">
+        #{licence,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="stopcarno != null">
+        #{stopcarno,jdbcType=VARCHAR},
+      </if>
+      <if test="tenementid != null">
+        #{tenementid,jdbcType=INTEGER},
+      </if>
+      <if test="carportid != null">
+        #{carportid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fcz.entity.Car">
+    update car
+    <set>
+      <if test="carcc != null">
+        carcc = #{carcc,jdbcType=DOUBLE},
+      </if>
+      <if test="carcolor != null">
+        carcolor = #{carcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="carno != null">
+        carno = #{carno,jdbcType=VARCHAR},
+      </if>
+      <if test="carnumber != null">
+        carnumber = #{carnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="carphoto != null">
+        carphoto = #{carphoto,jdbcType=VARCHAR},
+      </if>
+      <if test="cartype != null">
+        cartype = #{cartype,jdbcType=INTEGER},
+      </if>
+      <if test="drivinglicense != null">
+        drivinglicense = #{drivinglicense,jdbcType=VARCHAR},
+      </if>
+      <if test="licence != null">
+        licence = #{licence,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="stopcarno != null">
+        stopcarno = #{stopcarno,jdbcType=VARCHAR},
+      </if>
+      <if test="tenementid != null">
+        tenementid = #{tenementid,jdbcType=INTEGER},
+      </if>
+      <if test="carportid != null">
+        carportid = #{carportid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where carid = #{carid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fcz.entity.Car">
+    update car
+    set carcc = #{carcc,jdbcType=DOUBLE},
+      carcolor = #{carcolor,jdbcType=VARCHAR},
+      carno = #{carno,jdbcType=VARCHAR},
+      carnumber = #{carnumber,jdbcType=VARCHAR},
+      carphoto = #{carphoto,jdbcType=VARCHAR},
+      cartype = #{cartype,jdbcType=INTEGER},
+      drivinglicense = #{drivinglicense,jdbcType=VARCHAR},
+      licence = #{licence,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      stopcarno = #{stopcarno,jdbcType=VARCHAR},
+      tenementid = #{tenementid,jdbcType=INTEGER},
+      carportid = #{carportid,jdbcType=INTEGER}
+    where carid = #{carid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fcz.dao.BuildingtypeMapper">
+  <resultMap id="BaseResultMap" type="com.fcz.entity.Buildingtype">
+    <id column="buildingtypeid" jdbcType="INTEGER" property="buildingtypeid" />
+    <result column="buildingtypename" jdbcType="VARCHAR" property="buildingtypename" />
+  </resultMap>
+  
+  <select id="getAllBuildingType" resultMap="BaseResultMap">
+   SELECT  buildingtypeid,buildingtypename FROM buildingtype 
+  </select>
+  
+  <sql id="Base_Column_List">
+    buildingtypeid, buildingtypename
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from buildingtype
+    where buildingtypeid = #{buildingtypeid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from buildingtype
+    where buildingtypeid = #{buildingtypeid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.fcz.entity.Buildingtype">
+    insert into buildingtype (buildingtypeid, buildingtypename)
+    values (#{buildingtypeid,jdbcType=INTEGER}, #{buildingtypename,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fcz.entity.Buildingtype">
+    insert into buildingtype
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="buildingtypeid != null">
+        buildingtypeid,
+      </if>
+      <if test="buildingtypename != null">
+        buildingtypename,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="buildingtypeid != null">
+        #{buildingtypeid,jdbcType=INTEGER},
+      </if>
+      <if test="buildingtypename != null">
+        #{buildingtypename,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fcz.entity.Buildingtype">
+    update buildingtype
+    <set>
+      <if test="buildingtypename != null">
+        buildingtypename = #{buildingtypename,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where buildingtypeid = #{buildingtypeid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fcz.entity.Buildingtype">
+    update buildingtype
+    set buildingtypename = #{buildingtypename,jdbcType=VARCHAR}
+    where buildingtypeid = #{buildingtypeid,jdbcType=INTEGER}
+  </update>
+</mapper>

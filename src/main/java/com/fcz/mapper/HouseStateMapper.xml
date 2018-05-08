@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fcz.dao.HouseStateMapper">
+  <resultMap id="BaseResultMap" type="com.fcz.entity.HouseState">
+    <id column="house_stateid" jdbcType="INTEGER" property="houseStateid" />
+    <result column="housestatetype" jdbcType="VARCHAR" property="housestatetype" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    house_stateid, housestatetype
+  </sql>
+  
+  <select id="getAllHouseState" resultMap="BaseResultMap">
+    SELECT * from house_state
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from house_state
+    where house_stateid = #{houseStateid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from house_state
+    where house_stateid = #{houseStateid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.fcz.entity.HouseState">
+    insert into house_state (house_stateid, housestatetype)
+    values (#{houseStateid,jdbcType=INTEGER}, #{housestatetype,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fcz.entity.HouseState">
+    insert into house_state
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="houseStateid != null">
+        house_stateid,
+      </if>
+      <if test="housestatetype != null">
+        housestatetype,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="houseStateid != null">
+        #{houseStateid,jdbcType=INTEGER},
+      </if>
+      <if test="housestatetype != null">
+        #{housestatetype,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fcz.entity.HouseState">
+    update house_state
+    <set>
+      <if test="housestatetype != null">
+        housestatetype = #{housestatetype,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where house_stateid = #{houseStateid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fcz.entity.HouseState">
+    update house_state
+    set housestatetype = #{housestatetype,jdbcType=VARCHAR}
+    where house_stateid = #{houseStateid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fcz.dao.BuildingMapper">
+	<resultMap id="BaseResultMap" type="com.fcz.entity.Building">
+		<id column="buildingid" jdbcType="INTEGER" property="buildingid" />
+		<result column="buildingaspect" jdbcType="VARCHAR" property="buildingaspect" />
+		<result column="buildingname" jdbcType="VARCHAR" property="buildingname" />
+		<result column="buildingremark" jdbcType="VARCHAR" property="buildingremark" />
+		<result column="pliescount" jdbcType="INTEGER" property="pliescount" />
+		<result column="unitcount" jdbcType="INTEGER" property="unitcount" />
+		<result column="buildingtypeid" jdbcType="INTEGER" property="buildingtypeid" />
+		<result column="communityid" jdbcType="INTEGER" property="communityid" />
+		<result column="building_structure" jdbcType="VARCHAR"
+			property="buildingStructure" />
+	</resultMap>
+	<resultMap id="buildingMap" type="com.fcz.entity.Building">
+		<id column="buildingid" jdbcType="INTEGER" property="buildingid" />
+		<result column="buildingaspect" jdbcType="VARCHAR" property="buildingaspect" />
+		<result column="buildingname" jdbcType="VARCHAR" property="buildingname" />
+		<result column="buildingremark" jdbcType="VARCHAR" property="buildingremark" />
+		<result column="pliescount" jdbcType="INTEGER" property="pliescount" />
+		<result column="unitcount" jdbcType="INTEGER" property="unitcount" />
+		
+		<result column="building_structure" jdbcType="VARCHAR"
+			property="buildingStructure" />
+			<association property="buildingtype" javaType="com.fcz.entity.Buildingtype">
+			<result property="buildingtypeid" column="buildingtypeid" />
+			<result property="buildingtypename" column="buildingtypename" />
+		</association>
+		<association property="community" javaType="com.fcz.entity.Community">
+			<result property="communityId" column="community_id" />
+			<result property="communityName" column="community_name" />
+		</association>
+	</resultMap>
+	
+	<!-- 根据名字查询楼宇 -->
+	<select id="getAllBuilding" parameterType="java.lang.String"
+		resultMap="buildingMap">
+		SELECT * FROM building b
+		INNER JOIN community c ON c.community_id=b.communityid
+		INNER JOIN buildingtype t ON t.buildingtypeid=b.buildingtypeid
+		WHERE 1=1
+		<if test="buildingName!=''">
+			AND buildingname LIKE CONCAT ('%',#{buildingName},'%')
+		</if>
+
+	</select>
+	<!-- 根据名字查询楼宇总数 -->
+	<select id="getAllBuildingCount" parameterType="java.lang.String"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM building
+		WHERE 1=1
+		<if test="buildingName!=''">
+			AND buildingname LIKE CONCAT ('%',#{buildingName},'%')
+		</if>
+	</select>
+	
+	<!-- 根据楼宇id查询单元号 -->
+    <select id="getUnitById" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+     SELECT unitcount FROM building WHERE buildingid=#{buildingid}
+    </select>
+
+	<!-- 根据小区ID查询所属楼宇-->
+	<select id="getAllBuildingByCommunityid" parameterType="java.lang.Integer" resultType="com.fcz.entity.Building">
+		SELECT b.buildingid,b.buildingname FROM building b WHERE communityid=#{communityid}
+	</select>
+
+
+
+	<sql id="Base_Column_List">
+		buildingid, buildingaspect, buildingname, buildingremark, pliescount, unitcount,
+		buildingtypeid, communityid, building_structure
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from building
+		where buildingid = #{buildingid,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from building
+		where buildingid = #{buildingid,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.fcz.entity.Building">
+		insert into building (buildingid, buildingaspect, buildingname,
+		buildingremark, pliescount, unitcount,
+		buildingtypeid, communityid, building_structure
+		)
+		values (#{buildingid,jdbcType=INTEGER}, #{buildingaspect,jdbcType=VARCHAR},
+		#{buildingname,jdbcType=VARCHAR},
+		#{buildingremark,jdbcType=VARCHAR}, #{pliescount,jdbcType=INTEGER}, #{unitcount,jdbcType=INTEGER},
+		#{buildingtypeid,jdbcType=INTEGER}, #{communityid,jdbcType=INTEGER},
+		#{buildingStructure,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.fcz.entity.Building">
+		insert into building
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="buildingid != null">
+				buildingid,
+			</if>
+			<if test="buildingaspect != null">
+				buildingaspect,
+			</if>
+			<if test="buildingname != null">
+				buildingname,
+			</if>
+			<if test="buildingremark != null">
+				buildingremark,
+			</if>
+			<if test="pliescount != null">
+				pliescount,
+			</if>
+			<if test="unitcount != null">
+				unitcount,
+			</if>
+			<if test="buildingtypeid != null">
+				buildingtypeid,
+			</if>
+			<if test="communityid != null">
+				communityid,
+			</if>
+			<if test="buildingStructure != null">
+				building_structure,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="buildingid != null">
+				#{buildingid,jdbcType=INTEGER},
+			</if>
+			<if test="buildingaspect != null">
+				#{buildingaspect,jdbcType=VARCHAR},
+			</if>
+			<if test="buildingname != null">
+				#{buildingname,jdbcType=VARCHAR},
+			</if>
+			<if test="buildingremark != null">
+				#{buildingremark,jdbcType=VARCHAR},
+			</if>
+			<if test="pliescount != null">
+				#{pliescount,jdbcType=INTEGER},
+			</if>
+			<if test="unitcount != null">
+				#{unitcount,jdbcType=INTEGER},
+			</if>
+			<if test="buildingtypeid != null">
+				#{buildingtypeid,jdbcType=INTEGER},
+			</if>
+			<if test="communityid != null">
+				#{communityid,jdbcType=INTEGER},
+			</if>
+			<if test="buildingStructure != null">
+				#{buildingStructure,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.fcz.entity.Building">
+		update building
+		<set>
+			<if test="buildingaspect != null">
+				buildingaspect = #{buildingaspect,jdbcType=VARCHAR},
+			</if>
+			<if test="buildingname != null">
+				buildingname = #{buildingname,jdbcType=VARCHAR},
+			</if>
+			<if test="buildingremark != null">
+				buildingremark = #{buildingremark,jdbcType=VARCHAR},
+			</if>
+			<if test="pliescount != null">
+				pliescount = #{pliescount,jdbcType=INTEGER},
+			</if>
+			<if test="unitcount != null">
+				unitcount = #{unitcount,jdbcType=INTEGER},
+			</if>
+			<if test="buildingtypeid != null">
+				buildingtypeid = #{buildingtypeid,jdbcType=INTEGER},
+			</if>
+			<if test="communityid != null">
+				communityid = #{communityid,jdbcType=INTEGER},
+			</if>
+			<if test="buildingStructure != null">
+				building_structure = #{buildingStructure,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where buildingid = #{buildingid,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.fcz.entity.Building">
+		update building
+		set buildingaspect = #{buildingaspect,jdbcType=VARCHAR},
+		buildingname = #{buildingname,jdbcType=VARCHAR},
+		buildingremark = #{buildingremark,jdbcType=VARCHAR},
+		pliescount = #{pliescount,jdbcType=INTEGER},
+		unitcount = #{unitcount,jdbcType=INTEGER},
+		buildingtypeid = #{buildingtypeid,jdbcType=INTEGER},
+		communityid = #{communityid,jdbcType=INTEGER},
+		building_structure = #{buildingStructure,jdbcType=VARCHAR}
+		where buildingid = #{buildingid,jdbcType=INTEGER}
+	</update>
+</mapper>
